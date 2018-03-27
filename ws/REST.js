@@ -101,6 +101,26 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
         });
     });
 
+    // POST for /orders?order_date&first_name&last_name&address&phone - adds order
+    // req paramdter is the request object - note to get parameters (eg. stuff afer the '?') you must use req.body.param
+    // res parameter is the response object 
+  
+    router.post("/orders",function(req,res){
+        //console.log("url:", req.url);
+        //console.log("body:", req.body);
+        console.log("Deleting from orders table ", req.body.order_id);
+        var query = "DELETE FROM ?? WHERE order_id = ?";
+        var table = ["orders",req.body.order_id];
+        query = mysql.format(query,table);
+        connection.query(query,function(err,rows){
+            if(err) {
+                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
+            } else {
+                res.json({"Error" : false, "Message" : "User Deleted !"});
+            }
+        });
+    });
+
 }
 
 // The next line just makes this module available... think of it as a kind package statement in Java

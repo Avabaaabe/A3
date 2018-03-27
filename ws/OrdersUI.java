@@ -7,16 +7,15 @@
 *	1.0 February 2018 - Initial write of assignment 3 (ajl).
 *
 * Description: This class is the console for the an orders database. This interface uses a webservices or microservice
-* client class to update the ms_orderinfo MySQL database. 
+* client class to update the orderinfo MySQL database. 
 *
 * Parameters: None
 *
 * Internal Methods: None
 *
 * External Dependencies (one of the following):
-*	- MSlientAPI - this class provides an interface to a set of microservices
-*	- RetrieveServices - this is the server-side micro service for retrieving info from the ms_orders database
-*	- CreateServices - this is the server-side micro service for creating new orders in the ms_orders database
+*	- RESTClientAPI - this class provides a restful interface to a node.js webserver (see Server.js and REST.js).
+*	- ms_client - this class provides access to micro services vis-a-vis remote method invocation
 *
 ******************************************************************************************************************/
 
@@ -43,7 +42,7 @@ public class OrdersUI
 		Scanner keyboard = new Scanner(System.in);	// keyboard scanner object for user input
 		DateTimeFormatter dtf = null;				// Date object formatter
 		LocalDate localDate = null;					// Date object
-		MSClientAPI api = new MSClientAPI();	// RESTful api object
+		WSClientAPI api = new WSClientAPI();	// RESTful api object
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Main UI loop
@@ -70,7 +69,7 @@ public class OrdersUI
 
 			if ( option == '1' )
 			{
-				// Here we retrieve all the orders in the ms_orderinfo database
+				// Here we retrieve all the orders in the order database
 
 				System.out.println( "\nRetrieving All Orders::" );
 				try
