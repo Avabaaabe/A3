@@ -58,7 +58,8 @@ public class OrdersUI
 			System.out.println( "Select an Option: \n" );
 			System.out.println( "1: Retrieve all orders in the order database." );
 			System.out.println( "2: Retrieve an order by ID." );
-			System.out.println( "3: Add a new order to the order database." );				
+			System.out.println( "3: Add a new order to the order database." );
+			System.out.println( "4: Delete an existing order from the order database." );					
 			System.out.println( "X: Exit\n" );
 			System.out.print( "\n>>>> " );
 			option = keyboard.next().charAt(0);	
@@ -189,7 +190,52 @@ public class OrdersUI
 				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
 
 			} // if
+			//////////// option 4 ////////////
 
+			if ( option == '4' )
+			{
+				// Here we delete an order entry in the database
+
+				dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				localDate = LocalDate.now();
+				date = localDate.format(dtf);
+
+				System.out.println("Enter order id:");
+				orderid = keyboard.nextLine();
+
+				System.out.println("Deleting the following order:");
+				System.out.println("==============================");
+				System.out.println(" Order id:" + orderid);
+				System.out.println("==============================");					
+				System.out.println("\nPress 'y' to delete this order:");
+
+				option = keyboard.next().charAt(0);
+
+				if (( option == 'y') || (option == 'Y'))
+				{
+					try
+					{
+						System.out.println("\nDeleting order...");
+						response = api.deleteOrder(orderid);
+						System.out.println(response);
+
+					} catch(Exception e) {
+
+						System.out.println("Request failed:: " + e);
+
+					}
+
+				} else {
+
+					System.out.println("\nOrder not deleted...");
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
+
+			} // if
 			//////////// option X ////////////
 
 			if ( ( option == 'X' ) || ( option == 'x' ))
