@@ -48,7 +48,7 @@ REST.prototype.connectMysql = function() {
         connectionLimit : 100,
         host     : 'localhost',
         user     : 'root',
-        password : 'password',  // replace with your MySQL password
+        password : 'root',  // replace with your MySQL password
         database : 'ws_orderinfo',
         debug    :  false
     });

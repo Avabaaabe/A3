@@ -32,7 +32,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
     // Set up the orderinfo database credentials
     static final String USER = "root";
-    static final String PASS = "password"; //replace with your MySQL root password
+    static final String PASS = "root"; //replace with your MySQL root password
 
     // Do nothing constructor
     public CreateServices() throws RemoteException {}
