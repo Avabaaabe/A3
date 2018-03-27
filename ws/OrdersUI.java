@@ -7,15 +7,16 @@
 *	1.0 February 2018 - Initial write of assignment 3 (ajl).
 *
 * Description: This class is the console for the an orders database. This interface uses a webservices or microservice
-* client class to update the orderinfo MySQL database. 
+* client class to update the ms_orderinfo MySQL database. 
 *
 * Parameters: None
 *
 * Internal Methods: None
 *
 * External Dependencies (one of the following):
-*	- RESTClientAPI - this class provides a restful interface to a node.js webserver (see Server.js and REST.js).
-*	- ms_client - this class provides access to micro services vis-a-vis remote method invocation
+*	- MSlientAPI - this class provides an interface to a set of microservices
+*	- RetrieveServices - this is the server-side micro service for retrieving info from the ms_orders database
+*	- CreateServices - this is the server-side micro service for creating new orders in the ms_orders database
 *
 ******************************************************************************************************************/
 
@@ -42,7 +43,7 @@ public class OrdersUI
 		Scanner keyboard = new Scanner(System.in);	// keyboard scanner object for user input
 		DateTimeFormatter dtf = null;				// Date object formatter
 		LocalDate localDate = null;					// Date object
-		WSClientAPI api = new WSClientAPI();	// RESTful api object
+		MSClientAPI api = new MSClientAPI();	// RESTful api object
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Main UI loop
@@ -57,7 +58,8 @@ public class OrdersUI
 			System.out.println( "Select an Option: \n" );
 			System.out.println( "1: Retrieve all orders in the order database." );
 			System.out.println( "2: Retrieve an order by ID." );
-			System.out.println( "3: Add a new order to the order database." );				
+			System.out.println( "3: Add a new order to the order database." );
+			System.out.println( "4: Delete an existing order from the order database." );					
 			System.out.println( "X: Exit\n" );
 			System.out.print( "\n>>>> " );
 			option = keyboard.next().charAt(0);	
@@ -68,7 +70,7 @@ public class OrdersUI
 
 			if ( option == '1' )
 			{
-				// Here we retrieve all the orders in the order database
+				// Here we retrieve all the orders in the ms_orderinfo database
 
 				System.out.println( "\nRetrieving All Orders::" );
 				try
@@ -188,7 +190,52 @@ public class OrdersUI
 				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
 
 			} // if
+			//////////// option 4 ////////////
 
+			if ( option == '4' )
+			{
+				// Here we delete an order entry in the database
+
+				dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				localDate = LocalDate.now();
+				date = localDate.format(dtf);
+
+				System.out.println("Enter order id:");
+				orderid = keyboard.nextLine();
+
+				System.out.println("Deleting the following order:");
+				System.out.println("==============================");
+				System.out.println(" Order id:" + orderid);
+				System.out.println("==============================");					
+				System.out.println("\nPress 'y' to delete this order:");
+
+				option = keyboard.next().charAt(0);
+
+				if (( option == 'y') || (option == 'Y'))
+				{
+					try
+					{
+						System.out.println("\nDeleting order...");
+						response = api.deleteOrder(orderid);
+						System.out.println(response);
+
+					} catch(Exception e) {
+
+						System.out.println("Request failed:: " + e);
+
+					}
+
+				} else {
+
+					System.out.println("\nOrder not deleted...");
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
+
+			} // if
 			//////////// option X ////////////
 
 			if ( ( option == 'X' ) || ( option == 'x' ))
