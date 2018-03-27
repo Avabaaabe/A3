@@ -193,48 +193,44 @@ public class OrdersUI
 
 			if ( option == '4' )
 			{
-				// Here we delete an order entry in the database
+				// Here we get the order ID from the user
 
-				dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				localDate = LocalDate.now();
-				date = localDate.format(dtf);
+				error = true;
 
-				System.out.println("Enter order id:");
-				orderid = keyboard.nextLine();
-
-				System.out.println("Deleting the following order:");
-				System.out.println("==============================");
-				System.out.println(" Order id:" + orderid);
-				System.out.println("==============================");					
-				System.out.println("\nPress 'y' to delete this order:");
-
-				option = keyboard.next().charAt(0);
-
-				if (( option == 'y') || (option == 'Y'))
+				while (error)
 				{
+					System.out.print( "\nEnter the order ID to delete: " );
+					orderid = keyboard.nextLine();
+
 					try
 					{
-						System.out.println("\nDeleting order...");
-						response = api.deleteOrder(orderid);
-						System.out.println(response);
+						Integer.parseInt(orderid);
+						error = false;
+					} catch (NumberFormatException e) {
 
-					} catch(Exception e) {
+						System.out.println( "Not a number, please try again..." );
+						System.out.println("\nPress enter to continue..." );
 
-						System.out.println("Request failed:: " + e);
+					} // if
 
-					}
+				} // while
 
-				} else {
+				try
+				{
+					response = api.deleteOrders(orderid);
+					System.out.println(response);
 
-					System.out.println("\nOrder not deleted...");
+				} catch (Exception e) {
+
+					System.out.println("Request failed:: " + e);
+					
 				}
 
 				System.out.println("\nPress enter to continue..." );
 				c.readLine();
 
-				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
-
 			} // if
+
 			//////////// option X ////////////
 
 			if ( ( option == 'X' ) || ( option == 'x' ))

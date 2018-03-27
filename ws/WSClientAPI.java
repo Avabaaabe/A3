@@ -156,40 +156,29 @@ public class WSClientAPI
 		return(response.toString());
 		
     } // newOrder
+    
     /********************************************************************************
-	* Description: Posts the order to be deleted from the orderinfo database
+	* Description: Gets and returns the order based on the provided id from the
+	*              orderinfo database.
 	* Parameters: None
-	* Returns: String that contains the status of the POST operation
+	* Returns: String of all the order corresponding to the id argument in the 
+	*		   orderinfo database.
 	********************************************************************************/
 
-   	public String deleteOrder(String iorder_id) throws Exception
+	public String deleteOrders(String id) throws Exception
 	{
-		// Set up the URL and connect to the node server		
-		URL url = new URL("http://localhost:3000/api/orders");
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		// Set up the URL and connect to the node server
+		String url = "http://localhost:3000/api/orders/"+id;
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		// The POST parameters
-		String input = "order_id="+order_id;
+		//Form the request header and instantiate the response code
+		con.setRequestMethod("DELETE");
+		int responseCode = con.getResponseCode();
 
-		//Configure the POST connection for the parameters
-		conn.setRequestMethod("POST");
-        conn.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("Content-length", Integer.toString(input.length()));
-        conn.setRequestProperty("Content-Language", "en-GB");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setUseCaches(false);
-        conn.setDoOutput(true);
-
-        // Set up a stream and write the parameters to the server
-		OutputStream os = conn.getOutputStream();
-		os.write(input.getBytes());
-		os.flush();
-
-		//Loop through the input and build the response string.
-		//When done, close the stream.	
-		BufferedReader in = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-		String inputLine;		
+		//Set up a buffer to read the response from the server
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
 		StringBuffer response = new StringBuffer();
 
 		//Loop through the input and build the response string.
@@ -199,11 +188,9 @@ public class WSClientAPI
 		{
 			response.append(inputLine);
 		}
-		
 		in.close();
-		conn.disconnect();
 
 		return(response.toString());
-		
-    } // newOrder
+
+	}//delete
 } // WSClientAPI
