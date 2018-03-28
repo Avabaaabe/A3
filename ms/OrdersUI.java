@@ -29,7 +29,6 @@ public class OrdersUI
 {
 	public static void main(String args[])
 	{
-		boolean valid = false;						// authentification loop flag
 		boolean done = false;						// main loop flag
 		boolean error = false;						// error flag
 		char    option;								// Menu choice from user
@@ -49,7 +48,7 @@ public class OrdersUI
 		MSClientAPI api = new MSClientAPI();	// RESTful api object
 
 		// authentification
-		while(!valid)
+		while(true)
 		{
 			// Here, is the main menu set of choices
 
@@ -98,6 +97,7 @@ public class OrdersUI
 						response = api.newAccount(date, user, password);
 						System.out.println(response);
 						// break from the while loop, authentification is successful.
+						response = null;
 						break; 
 
 					} catch(Exception e) {
@@ -117,11 +117,64 @@ public class OrdersUI
 				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
 
 			} // sign up
+
+			//////////// option 2 ////////////
+
+			if ( option == '2' )
+			{
+				// Here we create a new order entry in the database
+
+				System.out.println("Enter user name:");
+				user = keyboard.nextLine();
+
+				System.out.println("Enter password:");
+				password = keyboard.nextLine();
+
+				System.out.println("Logging the following account:");
+				System.out.println("==============================");	
+				System.out.println(" User name:" + user);
+				System.out.println(" Password:" + password);
+				System.out.println("==============================");					
+				System.out.println("\nPress 'y' to log into this account:");
+
+				option = keyboard.next().charAt(0);
+
+				if (( option == 'y') || (option == 'Y'))
+				{
+					try
+					{
+						System.out.println("\nLogging account...");
+						response = api.checkAccount(user, password);
+						System.out.println(response);
+						// in the sake of the following 4 options.
+						if(response.equals("Account is valid")){
+							response = null;
+							break;// break from the while loop, authentification is successful.
+						}
+
+
+					} catch(Exception e) {
+
+						System.out.println("Request failed:: " + e);
+
+					}
+
+				} else {
+
+					System.out.println("\nAccount is not logged in.");
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
+
+			} // log in
 			//////////// option X ////////////
 
 			if ( ( option == 'X' ) || ( option == 'x' ))
-			{
-				break; // from this while loop
+			{	
+				return; // end
 
 			} // if
 

@@ -102,4 +102,18 @@ public class MSClientAPI
 		
     }
 
+    /********************************************************************************
+	* Description: Creates the new account to the orderinfo database
+	* Parameters: None
+	* Returns: String that contains the status of the create operatation
+	********************************************************************************/
+
+   	public String checkAccount(String UserName, String Password) throws Exception
+   	{
+           LoginServicesAI obj = (LoginServicesAI) Naming.lookup("LoginServices"); 
+           response = obj.checkAccount(UserName, Password);
+           return(response);	
+		
+    }
+
 }
