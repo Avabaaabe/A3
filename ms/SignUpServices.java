@@ -50,7 +50,10 @@ public class SignUpServices extends UnicastRemoteObject implements SignUpService
 
             // Bind this object instance to the name RetrieveServices in the rmiregistry 
             Naming.rebind("//localhost:1099/SignUpServices", obj); 
-
+            // log into the file
+            String file_name = "log.txt";
+            WriteFile data = new WriteFile( file_name , true );
+            data.writeToFile( "SighUpServices" );
         } catch (Exception e) {
 
             System.out.println("SignUpServices binding err: " + e.getMessage()); 

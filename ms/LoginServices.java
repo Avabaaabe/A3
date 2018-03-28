@@ -50,7 +50,10 @@ public class LoginServices extends UnicastRemoteObject implements LoginServicesA
 
             // Bind this object instance to the name RetrieveServices in the rmiregistry 
             Naming.rebind("//localhost:1099/LoginServices", obj); 
-
+            // log into the file
+            String file_name = "log.txt";
+            WriteFile data = new WriteFile( file_name , true );
+            data.writeToFile( "LoginServices" );
         } catch (Exception e) {
 
             System.out.println("LoginServices binding err: " + e.getMessage()); 

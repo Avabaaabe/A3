@@ -50,7 +50,10 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
 
             // Bind this object instance to the name RetrieveServices in the rmiregistry 
             Naming.rebind("//localhost:1099/DeleteServices", obj); 
-
+            // log into the file
+            String file_name = "log.txt";
+            WriteFile data = new WriteFile( file_name , true );
+            data.writeToFile( "DeleteServices" );
         } catch (Exception e) {
 
             System.out.println("DeleteServices binding err: " + e.getMessage()); 

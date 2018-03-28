@@ -50,7 +50,10 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
             // Bind this object instance to the name RetrieveServices in the rmiregistry 
             Naming.rebind("//localhost:1099/CreateServices", obj); 
-
+            // log into the file
+            String file_name = "log.txt";
+            WriteFile data = new WriteFile( file_name , true );
+            data.writeToFile( "CreateServices" );
         } catch (Exception e) {
 
             System.out.println("CreateServices binding err: " + e.getMessage()); 
