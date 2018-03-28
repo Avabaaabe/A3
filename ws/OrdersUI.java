@@ -33,6 +33,8 @@ public class OrdersUI
 		char    option;								// Menu choice from user
 		Console c = System.console();				// Press any key
 		String  date = null;						// order date
+		String  user = null;						// user account
+		String 	password = null;					// account password
 		String  first = null;						// customer first name
 		String  last = null;						// customer last name
 		String  address = null;						// customer address
@@ -43,6 +45,139 @@ public class OrdersUI
 		DateTimeFormatter dtf = null;				// Date object formatter
 		LocalDate localDate = null;					// Date object
 		WSClientAPI api = new WSClientAPI();	// RESTful api object
+
+		// authentification
+		while(true)
+		{
+			// Here, is the main menu set of choices
+
+			System.out.println( "\n\n\n\n" );
+			System.out.println( "Orders Database User Interface - Authentification: \n" );
+			System.out.println( "Select an Option: \n" );
+			System.out.println( "1: Sign up." );
+			System.out.println( "2: Login." );					
+			System.out.println( "X: Exit\n" );
+			System.out.print( "\n>>>> " );
+			option = keyboard.next().charAt(0);	
+			keyboard.nextLine();	// Removes data from keyboard buffer. If you don't clear the buffer, you blow 
+									// through the next call to nextLine()
+
+			//////////// option 1 ////////////
+
+			if ( option == '1' )
+			{
+				// Here we create a new order entry in the database
+
+				dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				localDate = LocalDate.now();
+				date = localDate.format(dtf);
+
+				System.out.println("Enter user name:");
+				user = keyboard.nextLine();
+
+				System.out.println("Enter password:");
+				password = keyboard.nextLine();
+
+				System.out.println("Creating the following account:");
+				System.out.println("==============================");
+				System.out.println(" Date:" + date);		
+				System.out.println(" User name:" + user);
+				System.out.println(" Password:" + password);
+				System.out.println("==============================");					
+				System.out.println("\nPress 'y' to create this account:");
+
+				option = keyboard.next().charAt(0);
+
+				if (( option == 'y') || (option == 'Y'))
+				{
+					try
+					{
+						System.out.println("\nCreating account...");
+						response = api.newAccount(date, user, password);
+						System.out.println(response);
+						// break from the while loop, authentification is successful.
+						response = null;
+						break; 
+
+					} catch(Exception e) {
+
+						System.out.println("Request failed:: " + e);
+
+					}
+
+				} else {
+
+					System.out.println("\nAccount not created...");
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
+
+			} // sign up
+
+			//////////// option 2 ////////////
+
+			if ( option == '2' )
+			{
+				// Here we create a new order entry in the database
+
+				System.out.println("Enter user name:");
+				user = keyboard.nextLine();
+
+				System.out.println("Enter password:");
+				password = keyboard.nextLine();
+
+				System.out.println("Logging the following account:");
+				System.out.println("==============================");	
+				System.out.println(" User name:" + user);
+				System.out.println(" Password:" + password);
+				System.out.println("==============================");					
+				System.out.println("\nPress 'y' to log into this account:");
+
+				option = keyboard.next().charAt(0);
+
+				if (( option == 'y') || (option == 'Y'))
+				{
+					try
+					{
+						System.out.println("\nLogging account...");
+						response = api.checkAccount(user, password);
+						System.out.println(response);
+						// in the sake of the following 4 options.
+						if(response.equals("Account is valid")){
+							response = null;
+							break;// break from the while loop, authentification is successful.
+						}
+
+
+					} catch(Exception e) {
+
+						System.out.println("Request failed:: " + e);
+
+					}
+
+				} else {
+
+					System.out.println("\nAccount is not logged in.");
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
+
+			} // log in
+			//////////// option X ////////////
+
+			if ( ( option == 'X' ) || ( option == 'x' ))
+			{	
+				return; // end
+
+			} // if
+
+		}//Authentification
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Main UI loop

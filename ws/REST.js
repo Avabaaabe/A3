@@ -119,6 +119,49 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
         });
     });
 
+    // POST for /orders?order_date&first_name&last_name&address&phone - adds order
+    // req paramdter is the request object - note to get parameters (eg. stuff afer the '?') you must use req.body.param
+    // res parameter is the response object 
+  
+    router.post("/signup",function(req,res){
+        //console.log("url:", req.url);
+        //console.log("body:", req.body);
+        console.log("Adding to users table ", req.body.order_date,",",req.body.user_name,",",req.body.password);
+        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        var table = ["users","user_date","user_name","password",req.body.user_date,req.body.user_name,req.body.password];
+        query = mysql.format(query,table);
+        console.log("query:"+ req.body.user_date+ " "+req.body.user_name+ " "+req.body.password);
+        connection.query(query,function(err,rows){
+            if(err) {
+                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
+            } else {
+                res.json({"Error" : false, "Message" : "User Added !"});
+            }
+        });
+    });
+
+     // POST for /orders?order_date&first_name&last_name&address&phone - adds order
+    // req paramdter is the request object - note to get parameters (eg. stuff afer the '?') you must use req.body.param
+    // res parameter is the response object 
+  
+    router.post("/login",function(req,res){
+        //console.log("url:", req.url);
+        //console.log("body:", req.body);
+        console.log("checking the users table ",req.body.user_name,",",req.body.password);
+        var query = "SELECT COUNT(*) FROM ?? WHERE ?? == ? AND ?? == ?";
+        var table = ["users","user_name","password",req.body.user_name,req.body.password];
+        query = mysql.format(query,table);
+        connection.query(query,function(err,rows){
+            if(err) {
+                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
+            } else {
+                if(rows[0] == 1){
+                    res.json({"Error" : false, "Message" : "User Logged in !"});
+                }
+                res.json({"Error" : false, "Message" : "Wrong Account !"});
+            }
+        });
+    });
 }
 
 // The next line just makes this module available... think of it as a kind package statement in Java

@@ -193,4 +193,107 @@ public class WSClientAPI
 		return(response.toString());
 
 	}//delete
+	
+	/********************************************************************************
+	* Description: Posts the new order to the orderinfo database
+	* Parameters: None
+	* Returns: String that contains the status of the POST operation
+	********************************************************************************/
+
+   	public String newAccount(String Date, String UserName, String Password) throws Exception
+	{
+		// Set up the URL and connect to the node server		
+		URL url = new URL("http://localhost:3000/api/signup");
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		// The POST parameters
+		String input = "user_date="+Date+"&user_name="+UserName+"&password="+Password;
+
+		//Configure the POST connection for the parameters
+		conn.setRequestMethod("POST");
+        conn.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Content-length", Integer.toString(input.length()));
+        conn.setRequestProperty("Content-Language", "en-GB");
+        conn.setRequestProperty("charset", "utf-8");
+        conn.setUseCaches(false);
+        conn.setDoOutput(true);
+
+        // Set up a stream and write the parameters to the server
+		OutputStream os = conn.getOutputStream();
+		os.write(input.getBytes());
+		os.flush();
+
+		//Loop through the input and build the response string.
+		//When done, close the stream.	
+		BufferedReader in = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+		String inputLine;		
+		StringBuffer response = new StringBuffer();
+
+		//Loop through the input and build the response string.
+		//When done, close the stream.		
+
+		while ((inputLine = in.readLine()) != null) 
+		{
+			response.append(inputLine);
+		}
+		
+		in.close();
+		conn.disconnect();
+
+		return(response.toString());
+		
+    } // newAccount
+	
+	/********************************************************************************
+	* Description: Posts the new order to the orderinfo database
+	* Parameters: None
+	* Returns: String that contains the status of the POST operation
+	********************************************************************************/
+
+   	public String checkAccount(String Name, String Password) throws Exception
+	{
+		// Set up the URL and connect to the node server		
+		URL url = new URL("http://localhost:3000/api/login");
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		// The POST parameters
+		String input = "&user_name="+Name+"&password="+Password;
+
+		//Configure the POST connection for the parameters
+		conn.setRequestMethod("POST");
+        conn.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Content-length", Integer.toString(input.length()));
+        conn.setRequestProperty("Content-Language", "en-GB");
+        conn.setRequestProperty("charset", "utf-8");
+        conn.setUseCaches(false);
+        conn.setDoOutput(true);
+
+        // Set up a stream and write the parameters to the server
+		OutputStream os = conn.getOutputStream();
+		os.write(input.getBytes());
+		os.flush();
+
+		//Loop through the input and build the response string.
+		//When done, close the stream.	
+		BufferedReader in = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+		String inputLine;		
+		StringBuffer response = new StringBuffer();
+
+		//Loop through the input and build the response string.
+		//When done, close the stream.		
+
+		while ((inputLine = in.readLine()) != null) 
+		{
+			response.append(inputLine);
+		}
+		
+		in.close();
+		conn.disconnect();
+
+		return(response.toString());
+		
+    } // newAccount
+
 } // WSClientAPI
