@@ -24,13 +24,14 @@
 * External Dependencies: mysql
 *
 ******************************************************************************************************************/
-
+const fs = require('fs'); // feature 3
 var mysql   = require("mysql");     //Database
 
 function REST_ROUTER(router,connection) {
     var self = this;
     self.handleRoutes(router,connection);
 }
+
 
 // Here is where we define the routes. Essentially a route is a path taken through the code dependent upon the 
 // contents of the URL
@@ -50,6 +51,13 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
   
     router.get("/orders",function(req,res){
+        // const fs = require('fs');
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nRetriveServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
+
         console.log("Getting all database entries..." );
         var query = "SELECT * FROM ??";
         var table = ["orders"];
@@ -68,6 +76,13 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
      
     router.get("/orders/:order_id",function(req,res){
+        // const fs = require('fs');
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nRetriveServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
+
         console.log("Getting order ID: ", req.params.order_id );
         var query = "SELECT * FROM ?? WHERE ??=?";
         var table = ["orders","order_id",req.params.order_id];
@@ -86,6 +101,12 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object 
   
     router.post("/orders",function(req,res){
+        // const fs = require('fs');
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nCreateServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
         //console.log("url:", req.url);
         //console.log("body:", req.body);
         console.log("Adding to orders table ", req.body.order_date,",",req.body.first_name,",",req.body.last_name,",",req.body.address,",",req.body.phone);
@@ -106,6 +127,12 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
      
     router.delete("/orders/:order_id",function(req,res){
+        // const fs = require('fs');
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nDeleteServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
         console.log("Getting order ID: ", req.params.order_id );
         var query = "DELETE FROM ?? WHERE ??=?";
         var table = ["orders","order_id",req.params.order_id];
@@ -124,12 +151,19 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object 
   
     router.post("/signup",function(req,res){
+        // const fs = require('fs');
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nSignUpServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
         //console.log("url:", req.url);
         //console.log("body:", req.body);
-        console.log("Adding to users table ", req.body.user_date,",",req.body.user_name,",",req.body.password);
+        console.log("Adding to users table ", req.body.order_date,",",req.body.user_name,",",req.body.password);
         var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
         var table = ["users","user_date","user_name","password",req.body.user_date,req.body.user_name,req.body.password];
         query = mysql.format(query,table);
+        console.log("query:"+ req.body.user_date+ " "+req.body.user_name+ " "+req.body.password);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
@@ -143,19 +177,27 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // req paramdter is the request object - note to get parameters (eg. stuff afer the '?') you must use req.body.param
     // res parameter is the response object 
   
-    router.post("/login",function(req,res,next){
+    router.post("/login",function(req,res){
+
+        // add a line to a txt file, using appendFile
+        fs.appendFile('log.txt', '\nLoginServices', (err) => {  
+        if (err) throw err;
+        console.log('log.txt updated.');
+        });
         //console.log("url:", req.url);
         //console.log("body:", req.body);
-        req.user = req.body.user_name;
         console.log("checking the users table ",req.body.user_name,",",req.body.password);
-        var query = "SELECT * FROM ?? WHERE ?? = ?";
-        var table = ["users","user_name",req.user];
+        var query = "SELECT COUNT(*) FROM ?? WHERE ?? == ? AND ?? == ?";
+        var table = ["users","user_name","password",req.body.user_name,req.body.password];
         query = mysql.format(query,table);
-        connection.query(query,function (err, rows){
-            if(err||rows.length !==1 || rows[0].password != req.body.password) {
-                res.states(401).json({"Error" : true, "Message" : "Wrong Account !"});
+        connection.query(query,function(err,rows){
+            if(err) {
+                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "User Logged in !"});
+                if(rows[0] == 1){
+                    res.json({"Error" : false, "Message" : "User Logged in !"});
+                }
+                res.json({"Error" : false, "Message" : "Wrong Account !"});
             }
         });
     });

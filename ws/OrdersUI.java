@@ -146,7 +146,7 @@ public class OrdersUI
 						response = api.checkAccount(user, password);
 						System.out.println(response);
 						// in the sake of the following 4 options.
-						if(response.contains("false")){ // {"Error":false,"Message":"User Logged in !"}
+						if(response.equals("Account is valid")){
 							response = null;
 							break;// break from the while loop, authentification is successful.
 						}
